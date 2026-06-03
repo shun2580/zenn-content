@@ -161,6 +161,8 @@ fi
 `re.sub(r'read: false', ...)` のような単純なパターンだと、タスクの説明文に `read: false` という文字列が含まれていた場合に誤置換するリスクがあります。YAMLの `read` キーは必ずインデントされた位置にあるため、`^(\s+read: )false` のように行頭のインデントを含めてマッチさせることで安全に置換できます。
 :::
 
+なお、upstream には [`.opencode/tools/mark-as-read.ts`](https://github.com/yohey-w/multi-agent-shogun/blob/main/.opencode/tools/mark-as-read.ts) という既読処理ツールが存在します。本記事の `inbox_watcher.sh` 側での既読処理は、Gemini CLI を含む複数 CLI を一括対応するための設計判断として採用しました。
+
 この修正により、Gemini CLI と OpenCode も同一パイプラインで動かせるようになりました。
 
 ---
