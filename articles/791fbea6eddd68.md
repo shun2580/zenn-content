@@ -1,5 +1,5 @@
 ---
-title: "Gemini CLI + Ollama 導入で詰まった inbox3 問題と解決策 ── multi-agent-shogunへの異種CLI組み込み"
+title: "multi-agent-shogun に Gemini CLI + Ollama を入れたら inbox3 で詰まった話と解決策"
 emoji: "⚔️"
 type: "tech"
 topics: ["claudecode", "multiagent", "gemini", "ollama", "llm"]
