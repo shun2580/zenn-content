@@ -63,7 +63,7 @@ Claude Pro には一定時間ごとの使用量（メッセージ量）に対す
 ```mermaid
 graph TD
     A(["👤 殿<br/>自然言語で指示・承認のみ"])
-    B["⚔️ 将軍<br/>Claude Sonnet 4.6<br/>戦略判断・統括"]
+    B["⚔️ 将軍<br/>Claude Opus 4.8<br/>戦略判断・統括"]
     C["🏯 家老<br/>Claude Sonnet 4.6<br/>タスク分解・品質判定"]
     D["🎯 軍師<br/>Claude Sonnet 4.6<br/>品質チェック・ダッシュボード"]
     E["⚙️ 足軽1・2<br/>Claude Sonnet 4.6<br/>複雑な実装タスク"]
@@ -81,7 +81,8 @@ graph TD
 
 | エージェント | CLI | モデル | 用途 |
 |---|---|---|---|
-| 将軍・家老・軍師 | Claude Code | Sonnet 4.6 | 指揮・判断・品質管理 |
+| 将軍 | Claude Code | Opus 4.8 | 戦略判断・統括 |
+| 家老・軍師 | Claude Code | Sonnet 4.6 | タスク分解・判断・品質管理 |
 | 足軽1/2 | Claude Code | Sonnet 4.6 | 複雑な実装タスク |
 | 足軽3/6/7 | Gemini CLI | Gemini 2.5 Flash | 調査・コード生成（無料枠） |
 | 足軽4 | OpenCode | Ollama qwen3.5:9b | ローカルGPU推論 |
