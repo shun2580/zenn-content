@@ -209,9 +209,7 @@ bash scripts/inbox_write.sh karo "" clear_command karo
 
 ## GPU VRAM が Ollama の壁を決める
 
-RTX 4060 Ti 8GB を使っている場合、`qwen3.5:9b` は約6〜8GBのVRAMを消費します。つまり**実質1体しか同時推論できません**。
-
-一方、Gemini CLI は GPU を使わないので VRAM 消費ゼロ。足軽3/6/7 として3体並列で動かせます。この違いを活かして「重いタスクは Sonnet、軽いタスクは Gemini か Ollama」という使い分けが自然にできています。
+先述のとおり Ollama（足軽4）はローカル GPU 1枚に縛られ、同時に動かせるのは1体が限界です。一方 Gemini CLI は GPU を使わないので VRAM 消費はゼロ。足軽3/6/7 として3体を並列で動かせます。同じ「無料枠」でも並列度がまるで違うこの差が、「重いタスクは Sonnet、軽くて数を捌きたいタスクは Gemini、ローカルで完結させたいタスクは Ollama」という使い分けに効いています。
 
 ---
 
