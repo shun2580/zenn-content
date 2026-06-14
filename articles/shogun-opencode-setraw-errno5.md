@@ -1,5 +1,5 @@
 ---
-title: "ローカルLLMが遅いせいでTUIがsetRawMode errno5でクラッシュした話"
+title: "監視スクリプトがローカルLLMを無応答と誤判定してTUIをsetRawMode errno5でクラッシュさせた話"
 emoji: "🩺"
 type: "tech" # tech: 技術記事 / idea: アイデア
 topics: ["claudecode", "multiagent", "opencode", "ollama", "tmux"]
@@ -69,7 +69,7 @@ INFO service=skill count=3 init
 このあたりで「メモリかな」とも疑いました。9Bモデルなので、ロード時に一気にメモリを食ってOOMで殺された可能性はある。でも、
 
 - `dmesg` に OOM Killer の痕跡がない
-- システムRAM（合計約15GB）には十分な空きがあった（モデル自体は約6.6GB だが、こちらはGPU VRAM上で動作）
+- システムRAM（合計約15GB）には十分な空きがあった（モデル自体は約6.6GB）
 
 ということで、メモリ枯渇の線は消しました。後で出てくる errno5 も、メモリではなく端末のI/Oエラーなので、ここは筋が通っています。
 
