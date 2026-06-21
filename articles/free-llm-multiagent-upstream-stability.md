@@ -1,5 +1,5 @@
 ---
-title: "無料LLMでマルチエージェントを回すと、効くのは『モデルの賢さ』より『上流の安定性』だった"
+title: "無料LLMでマルチエージェントを回すなら、『モデルの賢さ』より『上流の可用性』を見たほうがいい"
 emoji: "🏯"
 type: "tech"
 topics: ["openrouter", "geminicli", "opencode", "ai", "マルチエージェント"]
@@ -14,7 +14,7 @@ published: false
 
 少し前に、将軍・家老・足軽からなる階層型マルチエージェント環境を整えたばかり（その記録が1本目の記事です）。その足軽（実行ワーカー）の一部を、まさにGemini CLIの無料枠で動かしていました。「事前にもっと調べておけば…」という後悔がすごかったです。
 
-> （※ここに1本目「マルチエージェント環境構築」記事へのリンクを挿入）
+> 関連：[1本目「マルチエージェント環境構築」記事](https://zenn.dev/masafumi_heijo/articles/791fbea6eddd68)
 
 というわけで、代替モデル探しが始まりました。結論から言うと、この乗り換えで一番効いたのは「どの無料モデルが賢いか」ではなく、もっと手前の話でした。
 
@@ -84,7 +84,7 @@ OpenRouterの無料モデルは、同じモデルIDでも実際に処理する�
 
 つまり仕組み上は、最初から上流を意識した設定にしておけば、今回の空転はある程度避けられた可能性があります。
 
-ただし**注意点**があり、OpenCodeでこの `provider` パラメータを使うには、OpenRouterのAPIに直接リクエストするのとは異なり、`opencode.jsonc` の設定ファイル経由でモデルごとに記述する必要があります。例えば `qwen/qwen3-coder:free` に `order` と `allow_fallbacks` を設定できることを確認しました（v1.17.9時点）。`ignore` フィールドについては公式ドキュメントに明示がないため要確認ですが、プロキシ層なしで設定ファイルだけで対応できる見込みです。
+ただし**注意点**があり、OpenCodeでこの `provider` パラメータを使うには、OpenRouterのAPIに直接リクエストするのとは異なり、`opencode.jsonc` の設定ファイル経由でモデルごとに記述する必要があります。実機では `qwen/qwen3-coder:free` に `order` と `allow_fallbacks` を設定できることを確認しました（v1.17.9時点）。`ignore`（特定プロバイダの除外）はOpenRouterのAPI自体には存在するフィールドですが、OpenCodeの `opencode.jsonc` 経由で同様に渡せるかは未確認です。少なくとも `order` と `allow_fallbacks` については、プロキシ層なしで設定ファイルだけで対応できることを確認しています。
 
 ## 対応：可用性を最優先に乗り換える（gpt-oss）
 
@@ -98,7 +98,7 @@ provider指定の検証には時間がかかるため、まずは「今すぐ動
 
 ### 正直なところ：乗り換え後の「安定」はまだ検証中
 
-タイトルで「上流の安定性が効く」と大きく出しましたが、フェアに書くと、**gpt-ossへ移してからの稼働がどれだけ安定しているかは、まだ十分な運用期間を取れていません**。現時点で言えるのは「Venice障害時にqwenが空転し、gpt-ossでは同じ症状が出ていない」という限定的な観測までです。「複数プロバイダだから安定するはず」という設計上の期待と、実測の安定性は別物なので、ここは継続観測して別途追記する予定です。断定ではなく、現在進行中の仮説として読んでください。
+タイトルで「上流の可用性を見たほうがいい」と書きましたが、ここははっきり区別しておきます。今回の経験で実証できたのは**「可用性」——特定の上流が詰まったときに逃げ場（別プロバイダ）があるか**の方です。一方で、乗り換え先の gpt-oss が**個体として長期に安定して動くか**は、まだ十分な運用期間を取れておらず検証中です。現時点で言えるのは「Venice障害時にqwenが空転し、gpt-ossでは同じ症状が出ていない」という限定的な観測まで。「複数プロバイダだから落ちにくいはず」という設計上の期待と、実測の安定性は別物なので、後者は継続観測して別途追記する予定です。可用性は仕組みの話として言い切れますが、安定性は現在進行中の仮説として読んでください。
 
 ## 残した宿題：手動の切り替えは、本来あるべき姿ではない
 
@@ -121,8 +121,6 @@ provider指定の検証には時間がかかるため、まずは「今すぐ動
 ## 参考（一次情報・2026年6月時点）
 
 - [OpenRouter FAQ](https://openrouter.ai/docs/faq)（無料モデルのレート制限：50 / 1,000 req/日）
-- [OpenRouter Provider Routing ドキュメント](https://openrouter.ai/docs/guides/routing/provider-selection)（`only` / `order` / `ignore` / `allow_fallbacks` / [Auto Exacto](https://openrouter.ai/docs/guides/routing/auto-exacto)）
+- [OpenRouter Provider Routing ドキュメント](https://openrouter.ai/docs/guides/routing/provider-selection)（`only` / `order` / `ignore` / `allow_fallbacks` / Auto Exacto）
 - gpt-oss-120b ベンチマーク: [OpenAI公式発表](https://openai.com/index/introducing-gpt-oss/) / [Artificial Analysis](https://artificialanalysis.ai/models/gpt-oss-120b)
-- [Gemini 2.5 Flash vs gpt-oss-120b 比較](https://artificialanalysis.ai/models/comparisons/gpt-oss-120b-vs-gemini-2-5-flash)
-
-> ※Gemini公式ベンチマークURLは別途確認が必要。
+- [Gemini 2.5 Flash vs gpt-oss-120b 比較](https://artificialanalysis.ai/models/comparisons/gpt-oss-120b-vs-gemini-2-5-flash)（Gemini側の公開ベンチは本比較ページに依拠）
