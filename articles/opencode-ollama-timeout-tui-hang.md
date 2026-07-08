@@ -16,7 +16,7 @@ published: false
 
 該当のエージェント（ashigaru7）は、コスト削減のためにローカルLLM（Ollama の `qwen3.5:9b`）を opencode 経由で動かしていました。一度はうまく動いていたのですが、ある日突然このハングが起きました。
 
-ちなみに、このマルチエージェントシステム自体の詳しい説明は別記事（[「監視スクリプトがローカルLLMを無応答と誤判定してTUIをsetRawMode errno5でクラッシュさせた話」](https://zenn.dev/tagomasamune/articles/shogun-opencode-setraw-errno5)）に譲ります。そちらではローカルLLMの遅さに監視スクリプトが誤反応して TUI を落とす事象をまとめていますが、今回の話はむしろその後の教訓です。
+ちなみに、このマルチエージェントシステム自体の詳しい説明は別記事（「監視スクリプトがローカルLLMを無応答と誤判定してTUIをsetRawMode errno5でクラッシュさせた話」・未公開）に譲ります。そちらではローカルLLMの遅さに監視スクリプトが誤反応して TUI を落とす事象をまとめていますが、今回の話はむしろその後の教訓です。
 
 ## 一次対応：「タイムアウトを設定すればいいだろう」
 
@@ -25,9 +25,12 @@ published: false
 そこで、単純な対応を入れました。
 ```jsonc
 {
-  "model": {
+  "provider": {
     "ollama": {
-      "timeout": 60000  // 60秒でタイムアウト
+      "options": {
+        "chunkTimeout": 30000,
+        "timeout": 60000
+      }
     }
   }
 }
